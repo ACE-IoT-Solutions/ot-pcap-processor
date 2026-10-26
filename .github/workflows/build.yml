@@ -3,6 +3,7 @@ name: Build and test
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -55,13 +56,45 @@ jobs:
       - name: Build macOS wheel
         if: matrix.os == 'macos-latest'
         run: uv build --wheel
-      - name: Install and smoke test wheel
+      - name: Install and process sample capture from wheel
         run: |
           uv venv .wheel-test
           uv pip install --python .wheel-test/bin/python dist/*.whl
           .wheel-test/bin/ot-pcap-processor --version
+          python3 scripts/generate_output_examples.py \
+            --binary .wheel-test/bin/ot-pcap-processor \
+            --output-dir "$RUNNER_TEMP/wheel-examples"
+          diff -r docs/examples "$RUNNER_TEMP/wheel-examples"
+      - name: Install and process sample capture from source distribution
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          uv venv .sdist-test
+          uv pip install --python .sdist-test/bin/python dist/*.tar.gz
+          .sdist-test/bin/ot-pcap-processor --version
+          python3 scripts/generate_output_examples.py \
+            --binary .sdist-test/bin/ot-pcap-processor \
+            --output-dir "$RUNNER_TEMP/sdist-examples"
+          diff -r docs/examples "$RUNNER_TEMP/sdist-examples"
       - name: Upload distributions
         uses: actions/upload-artifact@v4
         with:
           name: distributions-${{ matrix.os }}
+          path: dist/*
+
+  bundle:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: distributions-*
+          merge-multiple: true
+          path: dist
+      - name: Verify distributions and write checksums
+        run: python3 scripts/check_distributions.py dist
+      - name: Upload complete build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ot-pcap-processor-build
           path: dist/*

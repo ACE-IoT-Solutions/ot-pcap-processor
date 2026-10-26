@@ -137,7 +137,7 @@ OTLP exports include per-node sent and received counts, per-source and per-edge 
 - Modbus/TCP MBAP and PDU decoding use `rustmod-core`. The TCP assembler handles in-order segments, overlap, retransmission, and multiple ADUs in one segment. Out-of-order gaps reset the pending flow instead of reordering traffic.
 - BACnet segmented APDUs are classified but not reassembled. BACnet/SC, directly captured MS/TP, and BACnet/IPv6 BVLL are outside this version.
 
-Release checks and package publishing steps are in `docs/releasing.md` in the source distribution.
+CI builds and functionally tests installable wheels and an sdist, then uploads a combined artifact with checksums. Build retrieval, release checks, and package publishing steps are in [`docs/releasing.md`](docs/releasing.md) in the source distribution.
 
 ## Performance comparison
 
