@@ -1,0 +1,15 @@
+Captured frames: 2
+Decoded messages: 2 (BACnet packets: 1, Modbus messages: 1)
+Malformed or incomplete messages: 0
+BACnet devices: 0  Modbus units: 1  Conversations: 2
+Topology nodes: 5  gateway links: 1
+  bacnet/10.0.0.1 sent: 1  received: 0
+  modbus/10.0.0.1 sent: 1  received: 0
+  modbus/10.0.0.2 sent: 0  received: 1
+  modbus/10.0.0.2/unit/7 sent: 0  received: 1
+Broadcast messages: 1  Routed messages: 0
+  bacnet/who_is: 1
+  modbus/function_3_request: 1
+  bacnet 10.0.0.1 -> broadcast@10.0.0.255 who_is: 1
+  modbus 10.0.0.1 -> 10.0.0.2/unit/7 function_3_request: 1
+  Modbus unit 7 at 10.0.0.2

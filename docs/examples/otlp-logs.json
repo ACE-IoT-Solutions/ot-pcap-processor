@@ -1,0 +1,95 @@
+{
+  "resourceLogs": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "ot-pcap-processor"
+            }
+          }
+        ]
+      },
+      "scopeLogs": [
+        {
+          "logRecords": [
+            {
+              "attributes": [
+                {
+                  "key": "protocol",
+                  "value": {
+                    "stringValue": "bacnet"
+                  }
+                },
+                {
+                  "key": "device_a",
+                  "value": {
+                    "stringValue": "10.0.0.1"
+                  }
+                },
+                {
+                  "key": "device_b",
+                  "value": {
+                    "stringValue": "broadcast@10.0.0.255"
+                  }
+                },
+                {
+                  "key": "event.name",
+                  "value": {
+                    "stringValue": "ot.communication.observed"
+                  }
+                }
+              ],
+              "body": {
+                "stringValue": "ot.communication.observed"
+              },
+              "observedTimeUnixNano": "1700000002000000000",
+              "severityNumber": 9,
+              "severityText": "INFO",
+              "timeUnixNano": "100000000000"
+            },
+            {
+              "attributes": [
+                {
+                  "key": "protocol",
+                  "value": {
+                    "stringValue": "modbus"
+                  }
+                },
+                {
+                  "key": "device_a",
+                  "value": {
+                    "stringValue": "10.0.0.1"
+                  }
+                },
+                {
+                  "key": "device_b",
+                  "value": {
+                    "stringValue": "10.0.0.2/unit/7"
+                  }
+                },
+                {
+                  "key": "event.name",
+                  "value": {
+                    "stringValue": "ot.communication.observed"
+                  }
+                }
+              ],
+              "body": {
+                "stringValue": "ot.communication.observed"
+              },
+              "observedTimeUnixNano": "1700000002000000000",
+              "severityNumber": 9,
+              "severityText": "INFO",
+              "timeUnixNano": "101000000000"
+            }
+          ],
+          "scope": {
+            "name": "ot-pcap-processor"
+          }
+        }
+      ]
+    }
+  ]
+}

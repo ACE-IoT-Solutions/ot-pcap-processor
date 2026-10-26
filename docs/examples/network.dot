@@ -1,0 +1,11 @@
+digraph ot_network {
+  rankdir=LR;
+  "bacnet/10.0.0.1" [label="10.0.0.1\nbacnet_ip_device"];
+  "bacnet/broadcast@10.0.0.255" [label="broadcast@10.0.0.255\nbacnet_broadcast"];
+  "modbus/10.0.0.1" [label="10.0.0.1\nmodbus_tcp_client"];
+  "modbus/10.0.0.2" [label="10.0.0.2\nmodbus_tcp_gateway"];
+  "modbus/10.0.0.2/unit/7" [label="10.0.0.2/unit/7\nmodbus_rtu_unit"];
+  "modbus/10.0.0.2" -> "modbus/10.0.0.2/unit/7" [style=dashed,label="routes to"];
+  "bacnet/10.0.0.1" -> "bacnet/broadcast@10.0.0.255" [label="bacnet: 1"];
+  "modbus/10.0.0.1" -> "modbus/10.0.0.2/unit/7" [label="modbus: 1"];
+}

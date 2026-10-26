@@ -1,0 +1,67 @@
+name: Build and test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: astral-sh/setup-uv@v10
+      - name: Rust checks
+        run: |
+          cargo fmt --check
+          cargo test --locked
+          cargo clippy --locked --all-targets -- -D warnings
+      - name: Validate exported RDF against upstream Corona
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          cargo build --locked
+          python3 scripts/generate_validation_capture.py "$RUNNER_TEMP/corona-validation.pcap"
+          target/debug/ot-pcap-processor file "$RUNNER_TEMP/corona-validation.pcap" --corona "$RUNNER_TEMP/corona-validation.ttl"
+          git clone https://github.com/ACE-IoT-Solutions/corona-network-standard.git "$RUNNER_TEMP/corona-network-standard"
+          git -C "$RUNNER_TEMP/corona-network-standard" checkout f9eebeb84b0e1c260dcfc77fbd0f681904d4b8b5
+          cd "$RUNNER_TEMP/corona-network-standard"
+          uv sync --frozen --python 3.11 --no-dev
+          uv run --no-sync --python 3.11 corona-network-tool validate "$RUNNER_TEMP/corona-validation.ttl"
+          uv run --no-sync --python 3.11 python "$GITHUB_WORKSPACE/scripts/validate_corona_topology.py" \
+            "$RUNNER_TEMP/corona-validation.ttl" \
+            --network-ontology src/corona_network_standard/data/ontology/network-ontology.ttl \
+            --network-shapes src/corona_network_standard/data/shapes/network-shapes.ttl
+      - name: Check documented output examples
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          python3 scripts/generate_output_examples.py
+          git diff --exit-code -- docs/examples
+      - name: Build source distribution
+        if: matrix.os == 'ubuntu-latest'
+        run: uv build --sdist
+      - name: Build Linux manylinux wheel
+        if: matrix.os == 'ubuntu-latest'
+        uses: PyO3/maturin-action@v1
+        with:
+          target: x86_64
+          manylinux: auto
+          args: --release --locked --out dist
+      - name: Build macOS wheel
+        if: matrix.os == 'macos-latest'
+        run: uv build --wheel
+      - name: Install and smoke test wheel
+        run: |
+          uv venv .wheel-test
+          uv pip install --python .wheel-test/bin/python dist/*.whl
+          .wheel-test/bin/ot-pcap-processor --version
+      - name: Upload distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: distributions-${{ matrix.os }}
+          path: dist/*

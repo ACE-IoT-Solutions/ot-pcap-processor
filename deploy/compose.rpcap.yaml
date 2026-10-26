@@ -1,0 +1,52 @@
+services:
+  processor:
+    build:
+      context: ..
+      dockerfile: Containerfile
+    image: localhost/ot-pcap-processor:0.1.0
+    command:
+      - daemon
+      - --rpcap-listen
+      - 0.0.0.0:2003
+      - --rpcap-data-port
+      - "2004"
+      - --rpcap-interface
+      - ${RPCAP_INTERFACE:?Set RPCAP_INTERFACE to an interface name on the remote rpcapd host}
+      - --rpcap-allow-peer
+      - ${RPCAP_PEER_IP:?Set RPCAP_PEER_IP to the remote rpcapd address}
+      - --otlp-endpoint
+      - http://alloy:4318
+    ports:
+      - "2003:2003/tcp"
+      - "2004:2004/tcp"
+    environment:
+      RPCAP_PASSWORD: ${RPCAP_PASSWORD:-}
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      - alloy
+    restart: unless-stopped
+
+  alloy:
+    image: docker.io/grafana/alloy:v1.21.2
+    command:
+      - run
+      - --stability.level=experimental
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.alloy
+    volumes:
+      - ./config.alloy:/etc/alloy/config.alloy:ro
+      - alloy-data:/var/lib/alloy/data
+    ports:
+      - "127.0.0.1:4318:4318/tcp"
+      - "127.0.0.1:12345:12345/tcp"
+    restart: unless-stopped
+
+volumes:
+  alloy-data:

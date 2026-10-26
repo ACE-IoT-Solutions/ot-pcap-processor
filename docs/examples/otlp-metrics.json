@@ -1,0 +1,878 @@
+{
+  "resourceMetrics": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "ot-pcap-processor"
+            }
+          }
+        ]
+      },
+      "scopeMetrics": [
+        {
+          "metrics": [
+            {
+              "name": "bacnet_whois_requests_total",
+              "sum": {
+                "aggregationTemporality": 2,
+                "dataPoints": [
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "bacnet"
+                        }
+                      },
+                      {
+                        "key": "source",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ],
+                "isMonotonic": true
+              }
+            },
+            {
+              "name": "modbus_requests_total",
+              "sum": {
+                "aggregationTemporality": 2,
+                "dataPoints": [
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "source",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      },
+                      {
+                        "key": "function",
+                        "value": {
+                          "stringValue": "3"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ],
+                "isMonotonic": true
+              }
+            },
+            {
+              "gauge": {
+                "dataPoints": [
+                  {
+                    "asInt": "0",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ]
+              },
+              "name": "ot_bacnet_devices"
+            },
+            {
+              "name": "ot_broadcast_packets_total",
+              "sum": {
+                "aggregationTemporality": 2,
+                "dataPoints": [
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "bacnet"
+                        }
+                      },
+                      {
+                        "key": "source",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "0",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "source",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ],
+                "isMonotonic": true
+              }
+            },
+            {
+              "name": "ot_decoded_messages_total",
+              "sum": {
+                "aggregationTemporality": 2,
+                "dataPoints": [
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "bacnet"
+                        }
+                      },
+                      {
+                        "key": "source",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "source",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ],
+                "isMonotonic": true
+              }
+            },
+            {
+              "name": "ot_edge_messages_total",
+              "sum": {
+                "aggregationTemporality": 2,
+                "dataPoints": [
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "bacnet"
+                        }
+                      },
+                      {
+                        "key": "source_device",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      },
+                      {
+                        "key": "destination_device",
+                        "value": {
+                          "stringValue": "broadcast@10.0.0.255"
+                        }
+                      },
+                      {
+                        "key": "message",
+                        "value": {
+                          "stringValue": "who_is"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "source_device",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      },
+                      {
+                        "key": "destination_device",
+                        "value": {
+                          "stringValue": "10.0.0.2/unit/7"
+                        }
+                      },
+                      {
+                        "key": "message",
+                        "value": {
+                          "stringValue": "function_3_request"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ],
+                "isMonotonic": true
+              }
+            },
+            {
+              "name": "ot_forwarded_packets_total",
+              "sum": {
+                "aggregationTemporality": 2,
+                "dataPoints": [
+                  {
+                    "asInt": "0",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "bacnet"
+                        }
+                      },
+                      {
+                        "key": "source",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "0",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "source",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ],
+                "isMonotonic": true
+              }
+            },
+            {
+              "gauge": {
+                "dataPoints": [
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "gateway",
+                        "value": {
+                          "stringValue": "10.0.0.2"
+                        }
+                      },
+                      {
+                        "key": "unit",
+                        "value": {
+                          "stringValue": "10.0.0.2/unit/7"
+                        }
+                      }
+                    ],
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ]
+              },
+              "name": "ot_gateway_unit_info"
+            },
+            {
+              "name": "ot_malformed_packets_total",
+              "sum": {
+                "aggregationTemporality": 2,
+                "dataPoints": [
+                  {
+                    "asInt": "0",
+                    "attributes": [],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ],
+                "isMonotonic": true
+              }
+            },
+            {
+              "name": "ot_messages_total",
+              "sum": {
+                "aggregationTemporality": 2,
+                "dataPoints": [
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "bacnet"
+                        }
+                      },
+                      {
+                        "key": "source",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      },
+                      {
+                        "key": "message",
+                        "value": {
+                          "stringValue": "who_is"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "source",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      },
+                      {
+                        "key": "message",
+                        "value": {
+                          "stringValue": "function_3_request"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ],
+                "isMonotonic": true
+              }
+            },
+            {
+              "gauge": {
+                "dataPoints": [
+                  {
+                    "asInt": "1",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ]
+              },
+              "name": "ot_modbus_units"
+            },
+            {
+              "name": "ot_node_messages_total",
+              "sum": {
+                "aggregationTemporality": 2,
+                "dataPoints": [
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "bacnet"
+                        }
+                      },
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "bacnet/10.0.0.1"
+                        }
+                      },
+                      {
+                        "key": "direction",
+                        "value": {
+                          "stringValue": "sent"
+                        }
+                      },
+                      {
+                        "key": "message",
+                        "value": {
+                          "stringValue": "who_is"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "modbus/10.0.0.1"
+                        }
+                      },
+                      {
+                        "key": "direction",
+                        "value": {
+                          "stringValue": "sent"
+                        }
+                      },
+                      {
+                        "key": "message",
+                        "value": {
+                          "stringValue": "function_3_request"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "modbus/10.0.0.2"
+                        }
+                      },
+                      {
+                        "key": "direction",
+                        "value": {
+                          "stringValue": "received"
+                        }
+                      },
+                      {
+                        "key": "message",
+                        "value": {
+                          "stringValue": "function_3_request"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "modbus/10.0.0.2/unit/7"
+                        }
+                      },
+                      {
+                        "key": "direction",
+                        "value": {
+                          "stringValue": "received"
+                        }
+                      },
+                      {
+                        "key": "message",
+                        "value": {
+                          "stringValue": "function_3_request"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ],
+                "isMonotonic": true
+              }
+            },
+            {
+              "name": "ot_node_received_messages_total",
+              "sum": {
+                "aggregationTemporality": 2,
+                "dataPoints": [
+                  {
+                    "asInt": "0",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "bacnet"
+                        }
+                      },
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "bacnet/10.0.0.1"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "0",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "modbus/10.0.0.1"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "modbus/10.0.0.2"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "modbus/10.0.0.2/unit/7"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ],
+                "isMonotonic": true
+              }
+            },
+            {
+              "name": "ot_node_sent_messages_total",
+              "sum": {
+                "aggregationTemporality": 2,
+                "dataPoints": [
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "bacnet"
+                        }
+                      },
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "bacnet/10.0.0.1"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "modbus/10.0.0.1"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "0",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "modbus/10.0.0.2"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "0",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "modbus/10.0.0.2/unit/7"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ],
+                "isMonotonic": true
+              }
+            },
+            {
+              "name": "ot_routed_packets_total",
+              "sum": {
+                "aggregationTemporality": 2,
+                "dataPoints": [
+                  {
+                    "asInt": "0",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "bacnet"
+                        }
+                      },
+                      {
+                        "key": "source",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "0",
+                    "attributes": [
+                      {
+                        "key": "protocol",
+                        "value": {
+                          "stringValue": "modbus"
+                        }
+                      },
+                      {
+                        "key": "source",
+                        "value": {
+                          "stringValue": "10.0.0.1"
+                        }
+                      }
+                    ],
+                    "startTimeUnixNano": "1700000000000000000",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ],
+                "isMonotonic": true
+              }
+            },
+            {
+              "gauge": {
+                "dataPoints": [
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "bacnet/10.0.0.1"
+                        }
+                      },
+                      {
+                        "key": "node_type",
+                        "value": {
+                          "stringValue": "bacnet_ip_device"
+                        }
+                      }
+                    ],
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "bacnet/broadcast@10.0.0.255"
+                        }
+                      },
+                      {
+                        "key": "node_type",
+                        "value": {
+                          "stringValue": "bacnet_broadcast"
+                        }
+                      }
+                    ],
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "modbus/10.0.0.1"
+                        }
+                      },
+                      {
+                        "key": "node_type",
+                        "value": {
+                          "stringValue": "modbus_tcp_client"
+                        }
+                      }
+                    ],
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "modbus/10.0.0.2"
+                        }
+                      },
+                      {
+                        "key": "node_type",
+                        "value": {
+                          "stringValue": "modbus_tcp_gateway"
+                        }
+                      }
+                    ],
+                    "timeUnixNano": "1700000001000000000"
+                  },
+                  {
+                    "asInt": "1",
+                    "attributes": [
+                      {
+                        "key": "device",
+                        "value": {
+                          "stringValue": "modbus/10.0.0.2/unit/7"
+                        }
+                      },
+                      {
+                        "key": "node_type",
+                        "value": {
+                          "stringValue": "modbus_rtu_unit"
+                        }
+                      }
+                    ],
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ]
+              },
+              "name": "ot_topology_node_info"
+            },
+            {
+              "gauge": {
+                "dataPoints": [
+                  {
+                    "asInt": "5",
+                    "timeUnixNano": "1700000001000000000"
+                  }
+                ]
+              },
+              "name": "ot_topology_nodes"
+            }
+          ],
+          "scope": {
+            "name": "ot-pcap-processor"
+          }
+        }
+      ]
+    }
+  ]
+}

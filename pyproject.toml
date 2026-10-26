@@ -1,0 +1,27 @@
+[build-system]
+requires = ["maturin>=1.9,<2"]
+build-backend = "maturin"
+
+[project]
+name = "ot-pcap-processor"
+dynamic = ["version"]
+description = "Passive BACnet/IP and Modbus/TCP packet capture processor"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+keywords = ["BACnet", "Modbus", "PCAP", "OTLP", "operational technology"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Operating System :: POSIX",
+  "Programming Language :: Rust",
+  "Topic :: System :: Networking :: Monitoring",
+]
+
+[project.urls]
+Homepage = "https://github.com/ACE-IoT-Solutions/ot-pcap-processor"
+Repository = "https://github.com/ACE-IoT-Solutions/ot-pcap-processor"
+Issues = "https://github.com/ACE-IoT-Solutions/ot-pcap-processor/issues"
+
+[tool.maturin]
+bindings = "bin"

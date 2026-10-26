@@ -1,0 +1,21 @@
+otelcol.receiver.otlp "processor" {
+  http {
+    endpoint = "0.0.0.0:4318"
+  }
+
+  output {
+    metrics = [otelcol.exporter.debug.metrics.input]
+    logs    = [otelcol.exporter.debug.logs.input]
+  }
+}
+
+// Replace or extend these sinks with Alloy exporters for your telemetry backend.
+otelcol.exporter.debug "metrics" {
+  verbosity = "basic"
+}
+
+otelcol.exporter.debug "logs" {
+  verbosity           = "detailed"
+  sampling_initial    = 100
+  sampling_thereafter = 1
+}

@@ -1,0 +1,29 @@
+@prefix net: <http://www.example.org/network-ontology#> .
+@prefix bacnet: <https://data.ashrae.org/bacnet/> .
+@prefix ex: <http://example.org/ot-pcap-processor/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ex:node-6261636e65742f31302e302e302e31 a bacnet:Device, net:BacnetDevice ; net:address "10.0.0.1" ; rdfs:label "10.0.0.1" ; net:HWStatus "UNKNOWN" .
+ex:node-6261636e65742f62726f6164636173744031302e302e302e323535 a net:BroadcastAddress ; net:address "broadcast@10.0.0.255" ; rdfs:label "broadcast@10.0.0.255" .
+ex:node-6d6f646275732f31302e302e302e31 a net:ModbusTcpClient ; net:address "10.0.0.1" ; rdfs:label "10.0.0.1" ; net:HWStatus "UNKNOWN" .
+ex:node-6d6f646275732f31302e302e302e32 a net:ModbusTcpGateway ; net:address "10.0.0.2" ; rdfs:label "10.0.0.2" ; net:HWStatus "UNKNOWN" .
+ex:node-6d6f646275732f31302e302e302e322f756e69742f37 a net:ModbusRtuUnit ; net:address "10.0.0.2/unit/7" ; rdfs:label "10.0.0.2/unit/7" ; net:HWStatus "UNKNOWN" .
+ex:node-6261636e65742f31302e302e302e31 net:sentMessageCount 1 ; net:receivedMessageCount 0 .
+ex:node-6261636e65742f31302e302e302e31 net:hasNodeMessageObservation ex:node-observation-6261636e65742f31302e302e302e312f73656e742f77686f5f6973 .
+ex:node-observation-6261636e65742f31302e302e302e312f73656e742f77686f5f6973 a net:MessageObservation ; net:direction "sent" ; net:messageType "who_is" ; net:count 1 .
+ex:node-6d6f646275732f31302e302e302e31 net:sentMessageCount 1 ; net:receivedMessageCount 0 .
+ex:node-6d6f646275732f31302e302e302e31 net:hasNodeMessageObservation ex:node-observation-6d6f646275732f31302e302e302e312f73656e742f66756e6374696f6e5f335f72657175657374 .
+ex:node-observation-6d6f646275732f31302e302e302e312f73656e742f66756e6374696f6e5f335f72657175657374 a net:MessageObservation ; net:direction "sent" ; net:messageType "function_3_request" ; net:count 1 .
+ex:node-6d6f646275732f31302e302e302e32 net:sentMessageCount 0 ; net:receivedMessageCount 1 .
+ex:node-6d6f646275732f31302e302e302e32 net:hasNodeMessageObservation ex:node-observation-6d6f646275732f31302e302e302e322f72656365697665642f66756e6374696f6e5f335f72657175657374 .
+ex:node-observation-6d6f646275732f31302e302e302e322f72656365697665642f66756e6374696f6e5f335f72657175657374 a net:MessageObservation ; net:direction "received" ; net:messageType "function_3_request" ; net:count 1 .
+ex:node-6d6f646275732f31302e302e302e322f756e69742f37 net:sentMessageCount 0 ; net:receivedMessageCount 1 .
+ex:node-6d6f646275732f31302e302e302e322f756e69742f37 net:hasNodeMessageObservation ex:node-observation-6d6f646275732f31302e302e302e322f756e69742f372f72656365697665642f66756e6374696f6e5f335f72657175657374 .
+ex:node-observation-6d6f646275732f31302e302e302e322f756e69742f372f72656365697665642f66756e6374696f6e5f335f72657175657374 a net:MessageObservation ; net:direction "received" ; net:messageType "function_3_request" ; net:count 1 .
+ex:node-6d6f646275732f31302e302e302e32 net:routesTo ex:node-6d6f646275732f31302e302e302e322f756e69742f37 .
+ex:edge-6261636e65742f31302e302e302e312f62726f6164636173744031302e302e302e323535 a net:CommunicationEdge ; net:sourceDevice ex:node-6261636e65742f31302e302e302e31 ; net:destinationDevice ex:node-6261636e65742f62726f6164636173744031302e302e302e323535 ; net:protocol "bacnet" ; net:messageCount 1 .
+ex:edge-6261636e65742f31302e302e302e312f62726f6164636173744031302e302e302e323535 net:hasMessageObservation ex:observation-6261636e65742f31302e302e302e312f62726f6164636173744031302e302e302e3235352f77686f5f6973 .
+ex:observation-6261636e65742f31302e302e302e312f62726f6164636173744031302e302e302e3235352f77686f5f6973 a net:MessageObservation ; net:messageType "who_is" ; net:count 1 .
+ex:edge-6d6f646275732f31302e302e302e312f31302e302e302e322f756e69742f37 a net:CommunicationEdge ; net:sourceDevice ex:node-6d6f646275732f31302e302e302e31 ; net:destinationDevice ex:node-6d6f646275732f31302e302e302e322f756e69742f37 ; net:protocol "modbus" ; net:messageCount 1 .
+ex:edge-6d6f646275732f31302e302e302e312f31302e302e302e322f756e69742f37 net:hasMessageObservation ex:observation-6d6f646275732f31302e302e302e312f31302e302e302e322f756e69742f372f66756e6374696f6e5f335f72657175657374 .
+ex:observation-6d6f646275732f31302e302e302e312f31302e302e302e322f756e69742f372f66756e6374696f6e5f335f72657175657374 a net:MessageObservation ; net:messageType "function_3_request" ; net:count 1 .

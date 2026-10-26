@@ -1,0 +1,9 @@
+.git
+.cocoindex_code
+.venv
+target
+dist
+__pycache__
+*.pcap
+*.pcapng
+*.gz

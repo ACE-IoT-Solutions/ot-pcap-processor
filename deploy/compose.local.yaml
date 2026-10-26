@@ -1,0 +1,40 @@
+# Linux rootful Podman example: capture on the host's network interface.
+services:
+  processor:
+    build:
+      context: ..
+      dockerfile: Containerfile
+    image: localhost/ot-pcap-processor:0.1.0
+    user: "0:0"
+    network_mode: host
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    command:
+      - daemon
+      - --interface
+      - ${CAPTURE_INTERFACE:?Set CAPTURE_INTERFACE to a host interface name}
+      - --otlp-endpoint
+      - http://127.0.0.1:4318
+    depends_on:
+      - alloy
+    restart: unless-stopped
+
+  alloy:
+    image: docker.io/grafana/alloy:v1.21.2
+    command:
+      - run
+      - --stability.level=experimental
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.alloy
+    volumes:
+      - ./config.alloy:/etc/alloy/config.alloy:ro
+      - alloy-data:/var/lib/alloy/data
+    ports:
+      - "127.0.0.1:4318:4318/tcp"
+      - "127.0.0.1:12345:12345/tcp"
+    restart: unless-stopped
+
+volumes:
+  alloy-data:

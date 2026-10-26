@@ -1,0 +1,14 @@
+[Unit]
+Description=OT packet capture processor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/ot-pcap-processor daemon --interface eth0 --bacnet-ports 47808 --modbus-ports 502 --otlp-endpoint http://127.0.0.1:4318
+Restart=on-failure
+RestartSec=5
+# Grant packet capture privileges to tcpdump according to your distribution policy.
+
+[Install]
+WantedBy=multi-user.target
