@@ -7,7 +7,7 @@ use std::sync::OnceLock;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 use clap::{Parser, Subcommand};
-use ot_pcap_processor::{Analyzer, CommunicationEvent};
+use ot_pcap_processor::{Analyzer, CommunicationEvent, corona_compat::LegacyMetrics};
 use serde_json::{Value, json};
 
 mod rpcap_listener;
@@ -59,6 +59,12 @@ enum Mode {
         /// Write Corona RDF topology and per-edge message counts as Turtle.
         #[arg(long)]
         corona: Option<PathBuf>,
+        /// Write BACnet metrics using corona-pcap-processor's legacy Turtle model.
+        #[arg(long)]
+        corona_compat: Option<PathBuf>,
+        /// Capture device address for the legacy Corona metrics model.
+        #[arg(long, requires = "corona_compat")]
+        capture_device: Option<String>,
     },
     /// Run in the foreground with local tcpdump or an active-mode rpcapd peer.
     Daemon {
@@ -101,14 +107,32 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             otlp_endpoint,
             graph,
             corona,
+            corona_compat,
+            capture_device,
         } => {
             let mut analyzer = Analyzer::with_ports(bacnet_ports, modbus_ports);
+            if corona_compat.is_some() {
+                analyzer.corona_compat = Some(LegacyMetrics::default());
+            }
             analyzer.read_capture(BufReader::new(File::open(path)?))?;
             if let Some(path) = graph {
                 std::fs::write(path, analyzer.graph_dot())?;
             }
             if let Some(path) = corona {
                 std::fs::write(path, analyzer.corona_turtle())?;
+            }
+            if let Some(mut path) = corona_compat {
+                if path.extension().is_none() {
+                    path.set_extension("ttl");
+                }
+                std::fs::write(
+                    path,
+                    analyzer
+                        .corona_compat
+                        .as_ref()
+                        .expect("compatibility accumulator enabled")
+                        .turtle(capture_device.as_deref()),
+                )?;
             }
             if let Some(endpoint) = otlp_endpoint {
                 export_pending_logs(&endpoint, &mut analyzer)?;

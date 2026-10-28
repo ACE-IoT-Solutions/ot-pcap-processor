@@ -39,6 +39,8 @@ def main() -> None:
             str(output_dir / "network.dot"),
             "--corona",
             str(output_dir / "network.ttl"),
+            "--corona-compat",
+            str(output_dir / "corona-compat.ttl"),
         ],
         capture_output=True,
         text=True,

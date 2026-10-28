@@ -1,12 +1,12 @@
 # Output guide
 
-`ot-pcap-processor` produces a terminal summary, Graphviz DOT, Corona network RDF in Turtle, OTLP/HTTP metrics, and OTLP/HTTP communication logs. The checked-in [example capture](examples/mixed-traffic.pcap) contains a BACnet/IP Who-Is broadcast from `10.0.0.1` and a Modbus/TCP function 3 request from `10.0.0.1` to gateway `10.0.0.2`, Unit ID 7. It has two packet records at capture seconds 100 and 101. The complete resulting files are linked below.
+`ot-pcap-processor` produces a terminal summary, Graphviz DOT, Corona network RDF in Turtle, legacy Corona BACnet metrics in Turtle, OTLP/HTTP metrics, and OTLP/HTTP communication logs. The checked-in [example capture](examples/mixed-traffic.pcap) contains a BACnet/IP Who-Is broadcast from `10.0.0.1` and a Modbus/TCP function 3 request from `10.0.0.1` to gateway `10.0.0.2`, Unit ID 7. It has two packet records at capture seconds 100 and 101. The complete resulting files are linked below.
 
 ## Which mode produces which output?
 
 | Mode | Terminal summary | DOT / Turtle files | OTLP metrics | OTLP logs |
 | --- | --- | --- | --- | --- |
-| `file` | Always, on completion | Optional, with `--graph` / `--corona` | With `--otlp-endpoint`, at completion | With `--otlp-endpoint`, at completion |
+| `file` | Always, on completion | Optional, with `--graph`, `--corona`, or `--corona-compat` | With `--otlp-endpoint`, at completion | With `--otlp-endpoint`, at completion |
 | `pipe` | At EOF without an OTLP endpoint | Not offered | With an endpoint, periodically while packets arrive and at EOF | With an endpoint, as new or due communication pairs appear |
 | `daemon --interface` | No terminal summary | Not offered | With an endpoint, periodically while packets arrive | With an endpoint, as new or due pairs appear |
 | `daemon --rpcap-listen` | No terminal summary | Not offered | With an endpoint, periodically, including idle timer ticks | With an endpoint, as new or due pairs appear |
@@ -30,6 +30,7 @@ The generator creates the small capture, runs the CLI, receives its OTLP/HTTP JS
 | [summary.txt](examples/summary.txt) | Complete `file` mode terminal summary. |
 | [network.dot](examples/network.dot) | Complete directed Graphviz map. |
 | [network.ttl](examples/network.ttl) | Complete Corona network Turtle export. |
+| [corona-compat.ttl](examples/corona-compat.ttl) | BACnet metrics using the earlier Python collector's RDF model. |
 | [otlp-metrics.json](examples/otlp-metrics.json) | Complete JSON body sent to `/v1/metrics`. |
 | [otlp-logs.json](examples/otlp-logs.json) | Complete JSON body sent to `/v1/logs`. |
 
@@ -81,6 +82,18 @@ ot-pcap-processor file docs/examples/mixed-traffic.pcap --corona network.ttl
 The [complete Turtle example](examples/network.ttl) uses the merged Corona network ontology. It declares BACnet devices and broadcast addresses, Modbus clients, gateways and logical units, directed `net:CommunicationEdge` resources, per-message observations on edges and nodes, and `net:routesTo` gateway links. For example, it describes the logical Modbus endpoint with `net:ModbusRtuUnit` and links the gateway to it. The class reflects the Unit ID routing model; it is not proof that an RTU serial bus was observed.
 
 The `ex:` resource identifiers encode endpoint names as hexadecimal UTF-8 bytes to keep URIs stable and unambiguous. Node `net:HWStatus "UNKNOWN"` values mean that passive packet decoding supplied no hardware status. `net:sentMessageCount` and `net:receivedMessageCount` are node totals; `net:messageCount` is an edge total. `net:MessageObservation` gives counts by decoded message type. Validate an export with the [upstream Corona validator](../README.md#validate-corona-rdf).
+
+## Python Corona compatibility output
+
+```sh
+ot-pcap-processor file docs/examples/mixed-traffic.pcap --corona-compat legacy.ttl
+# Include the optional legacy capture-device relationship:
+ot-pcap-processor file docs/examples/mixed-traffic.pcap \
+  --corona-compat legacy.ttl --capture-device 10.0.0.10
+```
+
+The [complete compatibility example](examples/corona-compat.ttl) reproduces the BACnet metric triples produced by `corona-pcap-processor` at `ebfae89`. It counts BACnet/IP, BVLL, and decoded APDU layers separately, as the Python collector does. Modbus messages are excluded from this legacy output. `--corona` still writes the current network topology RDF; both options can be used together. The comparison benchmark checks RDF triple equality before timing the collectors.
+This option is available from the current source checkout and is not in the already published `v0.1.0` wheel.
 
 ## OTLP/HTTP metrics
 

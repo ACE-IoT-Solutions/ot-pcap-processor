@@ -1,0 +1,6 @@
+@prefix bacnet: <https://data.ashrae.org/bacnet/> .
+@prefix corona: <http://example.org/standards/corona/metrics#> .
+@prefix ex: <http://example.org/bacnet-impl/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:addr_10.0.0.1 a corona:NetworkInterfaceMetric, corona:ApplicationMetric ; corona:identifier "interface-10.0.0.1"^^xsd:string ; corona:name "BACnet/IP Interface 10.0.0.1"^^xsd:string ; corona:description "BACnet/IP interface metrics for address 10.0.0.1"^^xsd:string ; bacnet:address "10.0.0.1"^^xsd:string ; bacnet:address-type "bacnet-ip"^^xsd:string ; corona:globalWhoIsRequestsSent "1"^^xsd:unsignedLong ; corona:packetsReceived "3"^^xsd:unsignedLong ; corona:totalBacnetMessagesSent "3"^^xsd:unsignedLong ; corona:totalRequestsSent "1"^^xsd:unsignedLong ; corona:whoIsRequestsSent "1"^^xsd:unsignedLong .

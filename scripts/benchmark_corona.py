@@ -83,12 +83,35 @@ def count_python_decoder_frames(python: Path, repo: Path, source: Path) -> int:
     return int(result.stdout.strip())
 
 
+def compare_rdf(python: Path, repo: Path, rust_output: Path, python_output: Path) -> int:
+    """Compare RDF triples, ignoring Turtle ordering and generated comments."""
+    script = (
+        "from rdflib import Graph; import sys; "
+        "rust = Graph().parse(sys.argv[1]); old = Graph().parse(sys.argv[2]); "
+        "missing = old - rust; extra = rust - old; "
+        "print(f'Python triples: {len(old)}, Rust triples: {len(rust)}, missing: {len(missing)}, extra: {len(extra)}'); "
+        "sys.exit(1 if missing or extra else 0)"
+    )
+    result = subprocess.run(
+        [str(python), "-c", script, str(rust_output), str(python_output)],
+        cwd=repo,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode:
+        raise RuntimeError(f"Corona compatibility RDF differs: {result.stdout}\n{result.stderr}")
+    print(result.stdout.strip())
+    return int(result.stdout.split("Python triples: ", 1)[1].split(",", 1)[0])
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("pcap", type=Path, help="BACnet-only classic PCAP")
     parser.add_argument("--python-repo", required=True, type=Path)
     parser.add_argument("--python-executable", type=Path)
     parser.add_argument("--rust-binary", type=Path, default=Path("target/release/ot-pcap-processor"))
+    parser.add_argument("--capture-device", help="Include the same legacy capture-device RDF in both outputs")
     parser.add_argument("--repeat", type=int, default=10)
     parser.add_argument("--runs", type=int, default=5)
     parser.add_argument("--warmups", type=int, default=1)
@@ -112,7 +135,7 @@ def main() -> None:
         python_decoder_frames = count_python_decoder_frames(python, python_repo, source) * args.repeat
         outputs = {name: temporary / f"{name}.ttl" for name in ("rust", "python")}
         commands = {
-            "rust": [str(rust), "file", str(capture), "--corona", str(outputs["rust"])],
+            "rust": [str(rust), "file", str(capture), "--corona-compat", str(outputs["rust"])],
             "python": [
                 str(python),
                 "src/cli.py",
@@ -122,11 +145,19 @@ def main() -> None:
                 "ttl",
             ],
         }
+        if args.capture_device:
+            commands["rust"].extend(["--capture-device", args.capture_device])
+            commands["python"].extend(["--capture-device", args.capture_device])
         directories = {"rust": Path.cwd(), "python": python_repo}
         times: dict[str, list[float]] = {"rust": [], "python": []}
         for _ in range(args.warmups):
             for name in ("rust", "python"):
                 run_once(commands[name], directories[name], outputs[name])
+        # Validate equivalent work before collecting timing samples. This
+        # comparison happens outside the timed sections.
+        for name in ("rust", "python"):
+            run_once(commands[name], directories[name], outputs[name])
+        matched_triples = compare_rdf(python, python_repo, outputs["rust"], outputs["python"])
         for round_number in range(args.runs):
             order = ("rust", "python") if round_number % 2 == 0 else ("python", "rust")
             for name in order:
@@ -135,6 +166,7 @@ def main() -> None:
                     raise RuntimeError("Rust collector did not report the expected frame count")
                 times[name].append(elapsed)
         medians = {name: statistics.median(values) for name, values in times.items()}
+        compare_rdf(python, python_repo, outputs["rust"], outputs["python"])
         result = {
             "platform": platform.platform(),
             "source_pcap": str(source),
@@ -147,6 +179,7 @@ def main() -> None:
             "seconds": times,
             "median_seconds": medians,
             "speedup": medians["python"] / medians["rust"],
+            "matched_rdf_triples": matched_triples,
             "output_bytes": {name: output.stat().st_size for name, output in outputs.items()},
         }
         if args.json_out:

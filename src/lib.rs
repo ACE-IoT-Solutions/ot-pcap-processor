@@ -24,6 +24,8 @@ use rustmod_core::{
     pdu::{DecodedRequest, Response},
 };
 
+pub mod corona_compat;
+
 /// A discovered BACnet device announced by I-Am.
 #[derive(Debug, Clone)]
 pub struct BacnetDevice {
@@ -161,6 +163,8 @@ pub struct Analyzer {
     pub modbus_units: BTreeSet<(String, u8)>,
     pub bacnet_ports: BTreeSet<u16>,
     pub modbus_ports: BTreeSet<u16>,
+    /// Optional accumulator for the earlier Python collector's BACnet metrics.
+    pub corona_compat: Option<corona_compat::LegacyMetrics>,
     flows: HashMap<(IpAddr, u16, IpAddr, u16), TcpFlow>,
     pair_last_logged: HashMap<(String, String, String), Duration>,
     pending_events: Vec<CommunicationEvent>,
@@ -210,6 +214,7 @@ impl Analyzer {
             modbus_units: BTreeSet::new(),
             bacnet_ports: bacnet_ports.into_iter().collect(),
             modbus_ports: modbus_ports.into_iter().collect(),
+            corona_compat: None,
             flows: HashMap::new(),
             pair_last_logged: HashMap::new(),
             pending_events: Vec::new(),
@@ -267,6 +272,11 @@ impl Analyzer {
                 if self.bacnet_ports.contains(&udp.source_port())
                     || self.bacnet_ports.contains(&udp.destination_port()) =>
             {
+                if udp.source_port() == 47808
+                    && let Some(compat) = &mut self.corona_compat
+                {
+                    compat.ingest(src, dst, udp.payload());
+                }
                 self.decode_bacnet(src, dst, udp.payload());
             }
             Some(TransportSlice::Tcp(tcp))
@@ -974,6 +984,26 @@ mod tests {
     use std::borrow::Cow;
     use std::io::Write;
     use std::net::Ipv4Addr;
+
+    #[test]
+    fn corona_compat_counts_legacy_layers_and_excludes_modbus() {
+        let mut analyzer = Analyzer::with_ports([47808], [502]);
+        analyzer.corona_compat = Some(corona_compat::LegacyMetrics::default());
+        analyzer
+            .read_capture(include_bytes!("../docs/examples/mixed-traffic.pcap").as_slice())
+            .unwrap();
+        let compat = analyzer.corona_compat.as_ref().unwrap();
+        let source = &compat.addresses["10.0.0.1"];
+        assert_eq!(source.total_packets, 3);
+        assert_eq!(source.message_types["BACnet/IP"], 1);
+        assert_eq!(source.message_types["OriginalBroadcastNPDU"], 1);
+        assert_eq!(source.message_types["WhoIsRequest"], 1);
+        assert_eq!(compat.addresses.len(), 1);
+        assert_eq!(
+            compat.turtle(None),
+            include_str!("../docs/examples/corona-compat.ttl")
+        );
+    }
 
     fn bacnet_ip_frame(destination: [u8; 4]) -> Vec<u8> {
         let payload = [0x81, 0x0a, 0, 8, 1, 0, 0x10, 8];

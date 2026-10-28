@@ -9,7 +9,7 @@ Python 3.9 through 3.15 are checked in CI on Linux and macOS.
 
 ## Install
 
-After publication to PyPI:
+Install the published release from PyPI:
 
 ```sh
 uv tool install ot-pcap-processor
@@ -17,7 +17,7 @@ uv tool install ot-pcap-processor
 python -m pip install ot-pcap-processor
 ```
 
-To install this checkout before publication, use `uv tool install .` or `python -m pip install .` in a virtual environment. Building from a source distribution requires Rust 1.96.1 or newer. Prebuilt wheels do not require Rust. For Rust development, run `cargo build --release --locked`.
+To install this checkout, use `uv tool install .` or `python -m pip install .` in a virtual environment. Building from a source distribution requires Rust 1.96.1 or newer. Prebuilt wheels do not require Rust. For Rust development, run `cargo build --release --locked`.
 
 ## Process a capture
 
@@ -30,7 +30,12 @@ dot -Tsvg network.dot -o network.svg
 
 # Send metrics to an OTLP/HTTP receiver as well.
 ot-pcap-processor file capture.pcap --otlp-endpoint http://127.0.0.1:4318
+
+# Produce BACnet metrics in the earlier Python collector's RDF model.
+ot-pcap-processor file capture.pcap --corona-compat legacy-metrics.ttl
 ```
+
+The `--corona-compat` option is available on `main` and will be included in the next PyPI release; the published `v0.1.0` package predates it.
 
 The graphs show observed traffic, with edge counts and BACnet device IDs learned from I-Am messages. The Turtle file uses the [Corona network standard](https://github.com/ACE-IoT-Solutions/corona-network-standard) `net:CommunicationEdge` and `net:MessageObservation` terms to retain per-message counts. Neither output infers physical cabling or switch topology.
 
@@ -142,14 +147,14 @@ CI builds and functionally tests installable wheels and an sdist, then uploads a
 
 ## Performance comparison
 
-On an Apple Mac16,8 with 48 GiB RAM (macOS 26.6.2), a BACnet PCAP of 6,680 packet records was repeated ten times to 66,800 records (5.79 MB). Both collectors read the capture and wrote Turtle files, with no OTLP receiver. After one warmup, five alternating runs gave these median wall times:
+On an Apple Mac16,8 with 48 GiB RAM (macOS 26.6.2), a BACnet PCAP of 6,680 packet records was repeated ten times to 66,800 records (5.79 MB). Both collectors read the capture and wrote the earlier Python collector's BACnet metric RDF model, with no OTLP receiver. After one warmup, five alternating runs gave these median wall times:
 
 | Collector | Median time | Output size |
 | --- | ---: | ---: |
-| This Rust collector, release build | 0.079 s | 83,502 bytes |
-| Earlier Python `corona-pcap-processor` at `ebfae89` | 5.667 s | 6,755 bytes |
+| This Rust collector, release build with `--corona-compat` | 0.097 s | 6,084 bytes |
+| Earlier Python `corona-pcap-processor` at `ebfae89` | 5.760 s | 6,755 bytes |
 
-The Rust CLI was **71.3× faster in this end-to-end run**. The outputs have different content: this collector writes network nodes, edges, and message observations, while the older Python collector writes BACnet metrics. The Python decoder yielded 66,360 of the 66,800 repeated packet records. These figures compare the full CLI paths on this capture; they are not isolated parser throughput or a claim of identical output semantics.
+The Rust CLI was **59.6× faster in this end-to-end run**. The generated Turtle files have different ordering, but both parse to the same 111 RDF triples, with zero missing or extra triples. The Python decoder yielded 66,360 of the 66,800 repeated packet records; the Rust compatibility accumulator reproduces the resulting BACnet metrics. The benchmark checks RDF equality before and after timing, so a semantic mismatch fails the run. These figures compare full CLI paths on this capture, not isolated parser throughput.
 
 To reproduce with a checkout of the earlier Python collector and its `uv` environment:
 
