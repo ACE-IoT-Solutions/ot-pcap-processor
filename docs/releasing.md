@@ -4,7 +4,7 @@ The PyPI package is a platform wheel containing the Rust CLI plus a source distr
 
 ## Build from CI
 
-The [Build and test workflow](../.github/workflows/build.yml) runs on pushes, pull requests, and manual dispatch. It tests Rust and Corona RDF output, builds Linux x86_64 and macOS arm64 wheels plus an sdist, installs each distribution into a clean environment, and compares its CLI, graph, Turtle, and OTLP output with the checked-in examples. A final job verifies the wheel metadata and sdist contents, then uploads a single `ot-pcap-processor-build` artifact containing all three distributions and `SHA256SUMS`.
+The [Build and test workflow](../.github/workflows/build.yml) runs on pushes, pull requests, and manual dispatch. It tests Rust and Corona RDF output, builds Linux x86_64 and macOS arm64 wheels plus an sdist, installs each distribution into a clean environment, and compares its CLI, graph, Turtle, and OTLP output with the checked-in examples. It verifies the wheel metadata and sdist contents, then uploads a single `ot-pcap-processor-build` artifact containing all three distributions and `SHA256SUMS`. A separate matrix installs the platform wheel and processes a sample capture with every Python minor version from 3.9 through 3.15 on Linux and macOS. The PyPI release workflow waits for this matrix before publishing.
 
 To trigger and retrieve a build of `main`:
 

@@ -5,6 +5,7 @@ OT PCAP Processor is a Rust command-line collector for passive BACnet/IP and Mod
 For complete, reproducible examples of the terminal summary, DOT graph, Corona Turtle, OTLP metrics, OTLP logs, and Alloy output, see the [output guide](docs/outputs.md).
 
 The Python distribution installs the `ot-pcap-processor` executable. It does not provide an importable Python module. Rust applications can use the `ot_pcap_processor::Analyzer` library.
+Python 3.9 through 3.15 are checked in CI on Linux and macOS.
 
 ## Install
 
