@@ -93,7 +93,6 @@ ot-pcap-processor file docs/examples/mixed-traffic.pcap \
 ```
 
 The [complete compatibility example](examples/corona-compat.ttl) reproduces the BACnet metric triples produced by `corona-pcap-processor` at `ebfae89`. It counts BACnet/IP, BVLL, and decoded APDU layers separately, as the Python collector does. Modbus messages are excluded from this legacy output. `--corona` still writes the current network topology RDF; both options can be used together. The comparison benchmark checks RDF triple equality before timing the collectors.
-This option is available from the current source checkout and is not in the already published `v0.1.0` wheel.
 
 ## OTLP/HTTP metrics
 

@@ -35,8 +35,6 @@ ot-pcap-processor file capture.pcap --otlp-endpoint http://127.0.0.1:4318
 ot-pcap-processor file capture.pcap --corona-compat legacy-metrics.ttl
 ```
 
-The `--corona-compat` option is available on `main` and will be included in the next PyPI release; the published `v0.1.0` package predates it.
-
 The graphs show observed traffic, with edge counts and BACnet device IDs learned from I-Am messages. The Turtle file uses the [Corona network standard](https://github.com/ACE-IoT-Solutions/corona-network-standard) `net:CommunicationEdge` and `net:MessageObservation` terms to retain per-message counts. Neither output infers physical cabling or switch topology.
 
 Modbus/TCP clients and servers are separate nodes. A significant Unit ID (1–247) creates a logical downstream unit and a gateway routing link; Unit ID 0 or 255 uses the TCP server node directly. A passive Unit ID observation suggests a gateway but does not prove the downstream wire is RTU. The [Modbus/TCP implementation guide](https://modbus.org/docs/Modbus_Messaging_Implementation_Guide_V1_0b.pdf) describes these Unit ID conventions. BACnet routed addresses and announced device instances also appear in the topology.
