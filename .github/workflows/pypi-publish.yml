@@ -1,0 +1,57 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    permissions:
+      contents: read
+
+  verify:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: ot-pcap-processor-build
+          path: dist
+      - name: Verify release version
+        if: github.event_name == 'release'
+        run: python3 scripts/check_release_tag.py "$GITHUB_REF_NAME"
+      - name: Verify package checksums and contents
+        run: |
+          (cd dist && sha256sum -c SHA256SUMS)
+          python3 scripts/check_distributions.py dist
+      - name: Prepare publishable files
+        run: |
+          mkdir publish-dist
+          cp dist/*.whl dist/*.tar.gz publish-dist/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pypi-distributions
+          path: publish-dist/*
+
+  publish:
+    if: github.event_name == 'release'
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: pypi-distributions
+          path: dist
+      - name: Publish to PyPI with trusted publishing
+        uses: pypa/gh-action-pypi-publish@release/v1
